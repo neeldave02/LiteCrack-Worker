@@ -1,0 +1,8 @@
+// {
+//     hashValue: '',
+//     crackedValue: '',
+//     status: '',
+//     creationTimestamp: ''
+
+// }
+
