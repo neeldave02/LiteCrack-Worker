@@ -126,35 +126,41 @@ const deleteS3Object = async (key) => {
   }
 };
 
+const stateVariable = true;
+
 exports.Main = async () => {
-  const SQSMessage = await PollMessages();
+  while (stateVariable) {
+    const SQSMessage = await PollMessages();
 
-  if (!SQSMessage.Messages) {
-    console.error("There are no messages in queue.");
-    return;
-  }
+    if (SQSMessage.Messages) {
+      const messageBody = JSON.parse(await SQSMessage.Messages[0].Body);
+      const wordListKey = await messageBody.wordlist;
+      const hash = await messageBody.hash;
 
-  const messageBody = JSON.parse(await SQSMessage.Messages[0].Body);
-  const wordListKey = await messageBody.wordlist;
-  const hash = await messageBody.hash;
+      const wordListValues = await getFromS3(`wordlists/${wordListKey}.txt`);
 
-  const wordListValues = await getFromS3(`wordlists/${wordListKey}.txt`);
+      const hashKey = (await "hashes/") + wordListKey + hash + ".json";
+      const result = await crackHash(hash, wordListValues.split("\n"));
 
-  const hashKey = (await "hashes/") + wordListKey + hash + ".json";
-  const result = await crackHash(hash, wordListValues.split("\n"));
-
-  if (result) {
-    await pushToS3(
-      `cracked/${hash}.json`,
-      JSON.stringify({ hashed: result.password })
-    );
-    console.log("Cracked hash has been pushed to SQS");
-    await deleteSQSMessage(SQSMessage);
-    await deleteS3Object(hashKey);
-  } else {
-    console.error("Failed to crack hash.");
-    await deleteSQSMessage(SQSMessage);
-    await pushToS3(hashKey, JSON.stringify({ hash: hash, status: "FAILED" }));
+      if (result) {
+        await pushToS3(
+          `cracked/${hash}.json`,
+          JSON.stringify({ hashed: result.password })
+        );
+        console.log("Cracked hash has been pushed to SQS");
+        await deleteSQSMessage(SQSMessage);
+        await deleteS3Object(hashKey);
+      } else {
+        console.error("Failed to crack hash.");
+        await deleteSQSMessage(SQSMessage);
+        await pushToS3(
+          hashKey,
+          JSON.stringify({ hash: hash, status: "FAILED" })
+        );
+      }
+    } else {
+      console.error("There are no messages in queue.");
+    }
   }
 };
 
