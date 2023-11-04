@@ -130,7 +130,7 @@ exports.Main = async () => {
   const SQSMessage = await PollMessages();
 
   if (!SQSMessage.Messages) {
-    console.error("No messages in queue.");
+    console.error("There are no messages in queue.");
     return;
   }
 
