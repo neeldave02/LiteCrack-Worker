@@ -147,7 +147,8 @@ exports.Main = async () => {
           `cracked/${hash}.json`,
           JSON.stringify({ hashed: result.password })
         );
-        console.log("Cracked hash has been pushed to SQS");
+        console.log(`Cracked hash: ${hash} for wordlist: ${wordListKey}.\n The decrypted hash was pushed to S3`);
+
         await deleteSQSMessage(SQSMessage);
         await deleteS3Object(hashKey);
       } else {
