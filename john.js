@@ -11,7 +11,7 @@ exports.john = async (wordList, hash) => {
     fs.writeFileSync(wordListFilePath, wordList);
 
     return new Promise((resolve, reject) => {
-      const johnProcess = execFile("john", [hashFilePath, `--wordlist=${wordListFilePath}`], (err, stdout, stderr) => {
+      const johnProcess = execFile("john", [hashFilePath, `--wordlist=${wordListFilePath}`, "--fork=4"], (err, stdout, stderr) => {
         if (err) console.error(err)
         if (stderr) console.error(stderr)
         if (stdout) {
