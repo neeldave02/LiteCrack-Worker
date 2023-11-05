@@ -7,6 +7,9 @@ exports.main = async () => {
     const SQSMessage = await receiveSQSMessages();
 
     if (SQSMessage?.Messages) {
+      const startTime = Date.now();
+      console.log("Starting password crack...")
+
       const messageBody = JSON.parse(await SQSMessage.Messages[0].Body);
       const wordList = messageBody.wordlist;
       const hash = messageBody.hash;
@@ -30,6 +33,8 @@ exports.main = async () => {
         await deleteSQSMessage(SQSMessage);
         await putS3Object(hashKey, JSON.stringify({ hash: hash, status: "FAILED" }));
       }
+
+      console.log(`Time taken: ${Date.now() - startTime}ms`);
     } else {
       console.error("There are no messages in queue.");
     }
