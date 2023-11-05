@@ -6,7 +6,7 @@ exports.main = async () => {
   while (true) {
     const SQSMessage = await receiveSQSMessages();
 
-    if (SQSMessage.Messages) {
+    if (SQSMessage?.Messages) {
       const messageBody = JSON.parse(await SQSMessage.Messages[0].Body);
       const wordList = messageBody.wordlist;
       const hash = messageBody.hash;
