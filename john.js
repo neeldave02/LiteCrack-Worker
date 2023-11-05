@@ -4,9 +4,10 @@ const path = require("path");
 
 exports.john = async (wordList, hash) => {
   try {
+    const cleanHash = hash.replace(/\\/g, "/");
     const hashFilePath = path.join(__dirname, "hash.txt");
     const wordListFilePath = path.join(__dirname, "wordlist.txt");
-    fs.writeFileSync(hashFilePath, hash);
+    fs.writeFileSync(hashFilePath, cleanHash);
     fs.writeFileSync(wordListFilePath, wordList);
 
     return new Promise((resolve, reject) => {
