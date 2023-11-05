@@ -16,7 +16,6 @@ exports.john = async (wordList, hash) => {
         if (stderr) console.error(stderr)
         if (stdout) {
           if (stdout.includes("No password hashes loaded")) resolve(null);
-          console.log(stdout + "\nSTDOUT:" + !!stdout);
           const showProcess = execFile("john", [hashFilePath, "--show"], (err, stdout, stderr) => {
             if (err) console.error(err);
             if (stderr) console.error(stderr);
