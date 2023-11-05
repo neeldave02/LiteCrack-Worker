@@ -21,7 +21,7 @@ exports.main = async () => {
       if (result) {
         console.log(`Cracked hash: ${hash} for wordlist: ${wordList}.`);
 
-        await putS3Object(crackedKey, JSON.stringify({ hashed: result.password }));
+        await putS3Object(crackedKey, JSON.stringify({ hashed: result }));
         await deleteSQSMessage(SQSMessage);
         await deleteS3Object(hashKey);
       } else {
