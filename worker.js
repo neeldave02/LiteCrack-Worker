@@ -16,7 +16,7 @@ exports.main = async () => {
       const crackedKey = "cracked/" + hash + ".json";
 
       const wordListValues = await getS3Object(wordListKey);
-      const result = await john(hash, wordListValues);
+      const result = await john(wordListValues, hash);
 
       if (result) {
         console.log(`Cracked hash: ${hash} for wordlist: ${wordList}.`);
