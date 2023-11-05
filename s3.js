@@ -2,7 +2,7 @@ require("dotenv").config();
 const { S3Client, GetObjectCommand, DeleteObjectCommand } = require("@aws-sdk/client-s3");
 const { Upload } = require("@aws-sdk/lib-storage");
 
-const s3Client = new S3Client({});
+const s3Client = new S3Client({ region: "ap-southeast-2" });
 const S3_BUCKET_NAME = process.env.S3_BUCKET_NAME;
 
 exports.deleteS3Object = async (key) => {

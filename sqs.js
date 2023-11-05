@@ -1,7 +1,7 @@
 require("dotenv").config();
 const { SQSClient, ReceiveMessageCommand, DeleteMessageCommand } = require("@aws-sdk/client-sqs");
 
-const sqsClient = new SQSClient({});
+const sqsClient = new SQSClient({ region: "ap-southeast-2"});
 
 const SQS_QUEUE_URL = process.env.SQS_QUEUE_URL;
 
