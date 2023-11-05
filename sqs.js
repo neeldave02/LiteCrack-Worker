@@ -15,7 +15,7 @@ exports.receiveSQSMessages = async () => {
             MaxNumberOfMessages: 1,
             QueueUrl: process.env.SQS_QUEUE_URL,
             WaitTimeSeconds: 5,
-            VisibilityTimeout: 5,
+            VisibilityTimeout: 300,
             MessageAttributes: ["All"],
         });
         const result = await sqsClient.send(command);
